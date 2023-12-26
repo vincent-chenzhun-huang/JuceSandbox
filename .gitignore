@@ -1,0 +1,11 @@
+.DS_Store
+
+*
+!Source
+!Source/*
+!Utils
+!Utils/*
+!.vscode
+!.vscode/*
+!CMakeLists.txt
+!.gitignore

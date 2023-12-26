@@ -17,5 +17,5 @@ void MainComponent::paint (juce::Graphics& g)
 void MainComponent::resized()
 {
     auto area = getLocalBounds();
-    audioPlayer.setBounds(area.removeFromLeft(area.getWidth() / 2));
+    audioPlayer.setBounds(area.removeFromLeft(area.getWidth()));
 }
