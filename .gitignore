@@ -7,4 +7,5 @@
 !.vscode/*
 !CMakeLists.txt
 !.gitignore
+!README.md
 .DS_Store
