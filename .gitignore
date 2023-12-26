@@ -8,4 +8,6 @@
 !CMakeLists.txt
 !.gitignore
 !README.md
+!Media
+!Media/*
 .DS_Store
