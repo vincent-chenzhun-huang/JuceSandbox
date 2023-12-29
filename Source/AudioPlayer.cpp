@@ -43,6 +43,7 @@ AudioPlayer::AudioPlayer() : state(Stopped), thumbnailCache(5), numUnits(8), pla
     addAndMakeVisible(&noiseSlider);
     noiseSlider.setRange(0.0, 0.5, 0.05);
     noiseSlider.setValue(0.0);
+    noiseSlider.onValueChange = [this] {playerThumbnail.repaint();};
 
     addAndMakeVisible(&playerThumbnail);
     // print out the dimension of the thumbnail
@@ -56,12 +57,6 @@ AudioPlayer::~AudioPlayer ()
 
 void AudioPlayer::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
 }
 
 void AudioPlayer::resized()

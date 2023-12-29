@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 #include "AudioPlayer.h"
+#include "AudioRecorder.h"
 
 //==============================================================================
 /*
@@ -22,5 +23,6 @@ public:
 private:
     //==============================================================================
     AudioPlayer audioPlayer;
+    AudioRecorder audioRecorder;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
