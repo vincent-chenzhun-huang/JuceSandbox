@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 #include "AudioPlayer.h"
 #include "AudioRecorder.h"
+#include "../Utils/Logger.h"
 
 //==============================================================================
 /*
@@ -13,7 +14,7 @@ class MainComponent  : public juce::Component
 {
 public:
     //==============================================================================
-    MainComponent();
+    MainComponent(SandboxLogger* logger);
     ~MainComponent() override;
 
     //==============================================================================
@@ -24,5 +25,6 @@ private:
     //==============================================================================
     AudioPlayer audioPlayer;
     AudioRecorder audioRecorder;
+    SandboxLogger* logger;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

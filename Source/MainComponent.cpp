@@ -1,10 +1,12 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent()
+MainComponent::MainComponent(SandboxLogger* logger) : logger(logger), audioPlayer(logger), audioRecorder(logger)
 {
     setSize (600, 800);
+    logger->log("Loading audio player", SandboxLogger::LogLevel::LOGGER_DEBUG);
     addAndMakeVisible(&audioPlayer);
+    logger->log("Loading audio recorder", SandboxLogger::LogLevel::LOGGER_DEBUG);
     addAndMakeVisible(&audioRecorder);
 }
 

@@ -12,7 +12,7 @@
 #include "AudioRecorder.h"
 
 //==============================================================================
-AudioRecorder::AudioRecorder() : audioSettings(deviceManager, 0, 256, 0, 256, false, false, false, false)
+AudioRecorder::AudioRecorder(SandboxLogger* logger) : logger(logger), audioSettings(deviceManager, 0, 256, 0, 256, false, false, false, false)
 {
     addAndMakeVisible(&audioSettings);
 }

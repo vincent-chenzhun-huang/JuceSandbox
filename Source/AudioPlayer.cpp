@@ -13,7 +13,7 @@
 #include "../Utils/PlayerThumbnail.h"
 
 //==============================================================================
-AudioPlayer::AudioPlayer() : state(Stopped), thumbnailCache(5), numUnits(8), playerThumbnail(512, formatManager, thumbnailCache), playHead(transportSource)
+AudioPlayer::AudioPlayer(SandboxLogger* logger) : logger(logger), state(Stopped), thumbnailCache(5), numUnits(8), playerThumbnail(512, formatManager, thumbnailCache), playHead(transportSource)
 {
     addAndMakeVisible(&playButton);
     playButton.setButtonText("Play");
@@ -48,6 +48,23 @@ AudioPlayer::AudioPlayer() : state(Stopped), thumbnailCache(5), numUnits(8), pla
     addAndMakeVisible(&playerThumbnail);
     // print out the dimension of the thumbnail
     addAndMakeVisible(&playHead);
+
+    addAndMakeVisible(&loopAudio);
+    loopAudio.setButtonText("Loop Audio");
+    // if it's enabled, set readerSource and transportSource to loop
+    loopAudio.onClick = [this, logger=this->logger] {
+        if (loopAudio.getToggleState())
+        {
+            logger->log("Looping audio", SandboxLogger::LogLevel::LOGGER_DEBUG);
+            readerSource->setLooping(true);
+            transportSource.setLooping(true);
+        } else
+        {
+            logger->log("Not looping audio", SandboxLogger::LogLevel::LOGGER_DEBUG);
+            readerSource->setLooping(false);
+            transportSource.setLooping(false);
+        }
+    };
 }
 
 AudioPlayer::~AudioPlayer ()
@@ -78,8 +95,9 @@ void AudioPlayer::resized()
     volumeSlider.setBounds(volumeRow);
 
     auto noiseRow = area.removeFromTop(rowHeight);
-    noiseLabel.setBounds(noiseRow.removeFromLeft(noiseRow.getWidth() / 4));
-    noiseSlider.setBounds(noiseRow);
+    noiseLabel.setBounds(noiseRow.removeFromLeft(proportionOfWidth(0.33)));
+    noiseSlider.setBounds(noiseRow.removeFromLeft(proportionOfWidth(0.33)));
+    loopAudio.setBounds(noiseRow.removeFromLeft(proportionOfWidth(0.34)));
 
     auto thumbnailHeight = areaHeight * (numUnits - paramUnits) / numUnits;
     auto thumbnailArea = area.removeFromBottom(thumbnailHeight);
@@ -124,7 +142,7 @@ void AudioPlayer::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
     }
 
     transportSource.getNextAudioBlock(bufferToFill);
-
+    // need to change this to know if we have reached the end.
     auto level = (float) volumeSlider.getValue();
     for (auto channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel)
     {
@@ -206,6 +224,17 @@ void AudioPlayer::openButtonClicked()
 
             if (reader != nullptr)
             {
+                auto duration = reader->lengthInSamples / reader->sampleRate;
+                // if (loopAudio.getToggleState())
+                // {
+                //     logger->log("Loaded audio with loop option", SandboxLogger::LogLevel::LOGGER_DEBUG);
+                    
+                //     transportSource.setLooping(true);
+                // } else
+                // {
+                //     logger->log("Loaded audio without loop option", SandboxLogger::LogLevel::LOGGER_DEBUG);
+                //     transportSource.setLooping(false);
+                // }
                 auto newSource = std::make_unique<juce::AudioFormatReaderSource> (reader, true);
                 transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
                 playButton.setEnabled (true);

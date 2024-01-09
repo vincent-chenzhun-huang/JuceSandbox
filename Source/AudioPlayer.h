@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "../Utils/PlayerThumbnail.h"
 #include "../Utils/PlayHead.h"
+#include "../Utils/Logger.h"
 
 //==============================================================================
 /*
@@ -32,7 +33,7 @@ class AudioPlayer  : public juce::AudioAppComponent,
                      public juce::ChangeListener
 {
 public:
-    AudioPlayer();
+    AudioPlayer(SandboxLogger* logger);
     ~AudioPlayer() override;
 
     void paint (juce::Graphics&) override;
@@ -52,6 +53,7 @@ private:
     juce::Slider volumeSlider;
     juce::Label noiseLabel;
     juce::Slider noiseSlider;
+    juce::ToggleButton loopAudio;
 
     juce::Random random;
 
@@ -78,6 +80,8 @@ private:
 
     int numUnits; // for dividing the area into unit rows
     int paramUnits;
+
+    SandboxLogger* logger;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPlayer)
 };

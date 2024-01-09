@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "../Utils/Logger.h"
 
 //==============================================================================
 /*
@@ -18,7 +19,7 @@
 class AudioRecorder  : public juce::AudioAppComponent
 {
 public:
-    AudioRecorder();
+    AudioRecorder(SandboxLogger* logger);
     ~AudioRecorder() override;
 
     void paint (juce::Graphics&) override;
@@ -28,6 +29,7 @@ public:
     void releaseResources() override;
 
 private:
+    SandboxLogger *logger;
     juce::AudioDeviceSelectorComponent audioSettings;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioRecorder)
 };

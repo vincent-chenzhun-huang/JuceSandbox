@@ -62,10 +62,13 @@ public:
             : DocumentWindow (name,
                               juce::Desktop::getInstance().getDefaultLookAndFeel()
                                                           .findColour (juce::ResizableWindow::backgroundColourId),
-                              DocumentWindow::allButtons)
+                              DocumentWindow::allButtons),
+              logger(std::make_unique<SandboxLogger>())
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (new MainComponent(), true);
+            juce::Logger::setCurrentLogger(logger.get());
+            logger->log("Loading application", SandboxLogger::LogLevel::LOGGER_INFO);
+            setContentOwned (new MainComponent(logger.get()), true);
 
            #if JUCE_IOS || JUCE_ANDROID
             setFullScreen (true);
@@ -82,6 +85,7 @@ public:
             // This is called when the user tries to close this window. Here, we'll just
             // ask the app to quit when this happens, but you can change this to do
             // whatever you need.
+            logger->log("Closing application", SandboxLogger::LogLevel::LOGGER_INFO);
             JUCEApplication::getInstance()->systemRequestedQuit();
         }
 
@@ -93,6 +97,7 @@ public:
         */
 
     private:
+        std::unique_ptr<SandboxLogger> logger;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)
     };
 
